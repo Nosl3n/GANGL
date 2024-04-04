@@ -28,10 +28,13 @@ else
 end
 xor = x + xmove;
 yor = y + ymove;
-theta = orientacion_vec(xor, yor, 1)
+theta = orientacion_vec(xor, yor, 1);
  %% Ordenamiento de los puntos
  [x_ord, y_ord] = ordenar_puntos(xcm, ycm, x, y);
-
+ %% Metodo de raphael
+ limit = 2;
+ [x,y] = meshgrid(mean_x-limit:0.01:mean_x+limit,mean_y-limit:0.01:mean_y+limit);
+ alpha = atan2(y - ycm, x - xcm) - theta + 90;
  %% Graficas
  graficar_personas(xor,yor);
  figure (2)
