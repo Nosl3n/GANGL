@@ -24,41 +24,50 @@ function [xrot, yrot, zrot] = GANGDL(x,y)
     [dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
 %----------------------------ROTACION DE LA GAUSSIANA ----------------------
     rotacion = -ang(1);
+    %rotacion = 0;
+    
 %-----------------------------------END------------------------------------
 %----------------------------- VARIANZAS MADRE  ----------------------------
-      min_sig = 0.5;
+    min_sig = 0.5;
     for i=1:length(dis)  
-        tam_y = abs((dis(i))*sin(deg2rad (ang(i))));
-        tam_x = abs((dis(i))*cos(deg2rad (ang(i))));
-        if tam_y > tam_x
-            sigma_y(i) = abs(dis(i));
-            sigma_x(i) = abs(dis(i))/2;
-            if sigma_x(i) < min_sig
-                sigma_x(i) = min_sig;
-            else
-                sigma_x(i) = sigma_x(i);
-            end
+       % tam_y = abs((dis(i))*sin(deg2rad (ang(i))));
+        %tam_x = abs((dis(i))*cos(deg2rad (ang(i))));
+        sigma_y(i) = abs(dis(i))/2;
+        sigma_x(i) = abs(dis(i));
+        if sigma_y(i) < min_sig
+            sigma_y(i) = min_sig;
         else
-            sigma_y(i) = abs(dis(i))/2;
-            sigma_x(i) = abs(dis(i));
-            if sigma_y(i) < min_sig
-                sigma_y(i) = min_sig;
-            else
-                sigma_y(i) = sigma_y(i);
-            end
+            sigma_y(i) = sigma_y(i);
         end
+        % if tam_y > tam_x
+        %     sigma_y(i) = abs(dis(i));
+        %     sigma_x(i) = abs(dis(i))/2;
+        %     if sigma_x(i) < min_sig
+        %         sigma_x(i) = min_sig;
+        %     else
+        %         sigma_x(i) = sigma_x(i);
+        %     end
+        % else
+        %     sigma_y(i) = abs(dis(i))/2;
+        %     sigma_x(i) = abs(dis(i));
+        %     if sigma_y(i) < min_sig
+        %         sigma_y(i) = min_sig;
+        %     else
+        %         sigma_y(i) = sigma_y(i);
+        %     end
+        % end
     end
 
-    
-    disp('Varianzas en el eje X')
-    disp(sigma_x)
-    disp('Varianzas en el eje Y')
-    disp(sigma_y)
-    disp ('Coordenadas x:')
-    disp(x)
-    disp ('Coordenadas y:')
-    disp(y)
-    disp('--------------------------------')
+    % 
+    % disp('Varianzas en el eje X')
+    % disp(sigma_x)
+    % disp('Varianzas en el eje Y')
+    % disp(sigma_y)
+    % disp ('Coordenadas x:')
+    % disp(x)
+    % disp ('Coordenadas y:')
+    % disp(y)
+    % disp('--------------------------------')
 %Se añade el sigma inicial, al final de todos los sigmas.
     sigma_x(length(sigma_x)+1)=sigma_x(1);
     sigma_y(length(sigma_y)+1)=sigma_y(1);
