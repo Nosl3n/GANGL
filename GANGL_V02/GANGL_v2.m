@@ -29,14 +29,17 @@ end
 xor = x + xmove;
 yor = y + ymove;
 theta = orientacion_vec(xor, yor, 1); %% Ordenamiento de los puntos
-[x_ord, y_ord] = ordenar_puntos(xcm, ycm, x, y);
+[x_ord, y_ord] = ordenar_puntos(xcm, ycm, x ...
+    , y);
 [dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
- %% Metodo de raphael
+%% Determinar el primer individuo mas cercano a la direccion
+
+%% generando las varianzas
 limit = 2;
 [x_mesh,y_mesh] = meshgrid(xcm-limit:0.01:xcm+limit,ycm-limit:0.01:ycm+limit);
 alpha = atan2(y - ycm, x - xcm) - theta + 90;
  %% Graficas
 graficar_personas(xor,yor);
-figure (2)
-graficar_personas(x,y);
+%figure (2)
+%graficar_personas(x,y);
 grid on;
