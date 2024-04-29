@@ -33,7 +33,16 @@ theta = orientacion_vec(xor, yor, 1); %% Ordenamiento de los puntos
     , y);
 [dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
 %% Determinar el primer individuo mas cercano a la direccion
-
+for i=1:length(ang)
+    if theta < ang(i)
+        orientacion = ang(i); %Primer angulo, para rotar todo
+        break;
+    end
+end
+%reordenamiento del vector angulos
+% new_vector = ordenamiento(ang,orientacion);
+% disp('referencia');disp(orientacion);disp(new_vector);
+% disp(ang);
 %% generando las varianzas
 limit = 2;
 [x_mesh,y_mesh] = meshgrid(xcm-limit:0.01:xcm+limit,ycm-limit:0.01:ycm+limit);

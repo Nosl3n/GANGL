@@ -1,0 +1,27 @@
+% Arreglo original de ángulos
+ang = [85.7971, 97.1846, 207.2943, 236.8003, 275.4340, 344.4685];
+
+% Punto de referencia
+punto_de_referencia = 207.2943;
+
+% Encuentra la posición del punto de referencia
+indice = find(ang == punto_de_referencia);
+
+% Reorganiza el arreglo original
+nuevo_ang = [ang(indice:end), ang(1:indice-1)];
+
+% Calcula las diferencias entre los ángulos y el nuevo punto de referencia
+diferencias = nuevo_ang - punto_de_referencia;
+
+% Asegúrate de que los ángulos estén en el rango correcto (de 0 a 360 grados)
+nuevo_ang = mod(nuevo_ang, 360);
+for i=1:length(ang)
+    if nuevo_ang(i)-nuevo_ang(1)>=0
+        nuevo_ang(i)=nuevo_ang(i)- nuevo_ang(1);
+    else
+        nuevo_ang(i)=nuevo_ang(i)+ nuevo_ang(1);
+    end
+
+end
+nuevo_ang = nuevo_ang - nuevo_ang(1);
+disp(nuevo_ang);
