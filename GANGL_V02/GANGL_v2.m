@@ -34,6 +34,9 @@ yor = y + ymove;
 theta = orientacion_vec(xor, yor, 1); %% Ordenamiento de los puntos
 [x_ord, y_ord] = ordenar_puntos(xcm, ycm, x, y);
 [dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
+disp('angulos y distancias')
+disp(ang);
+disp(dis);
 %% Determinar el primer individuo mas cercano a la direccion
 orientacion = 1000;
 for i=1:length(ang)
@@ -49,8 +52,9 @@ for i=1:length(ang)
 end
 %reordenamiento del vector angulos
 new_vector = ordenamiento(ang,orientacion); %vector ordenado desde la orientacion como cero grados
+ang = new_vector;
 disp('referencia');disp(orientacion);disp(new_vector);
-disp(ang);
+disp (dis);
 %% generando las varianzas
 min_sig = 0.5; %valor minimo del crecimiento de una varianza.
 for i=1:length(dis)  
@@ -135,7 +139,7 @@ for i=1:1:tam(1)
     end
 end
 %% Se genera la gaussiana usando el metodo de raphael
-rot = deg2rad(orientacion)
+rot = deg2rad(orientacion);
 a = (cos(rot)^2)./(2*varianzay) + (sin(rot)^2)./(2*varianzax);
 b = sin(2*rot)./(4*varianzay) - sin(2*rot)./(4*varianzax);
 c = (sin(rot)^2)./(2*varianzay)+ (cos(rot)^2)./(2*varianzax);
