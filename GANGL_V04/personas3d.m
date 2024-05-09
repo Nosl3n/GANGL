@@ -1,8 +1,8 @@
 function personas3d(posicion_x, posicion_y)   
     % Definir las dimensiones de la persona
-    altura_maxima = 0.8; % Altura máxima en el eje z
-    radio_cuerpo = 0.18; % Radio del cuerpo
-    radio_cabeza = 0.2; % Radio de la cabeza
+    altura_maxima = 1; % Altura máxima en el eje z
+    radio_cuerpo = 0.2; % Radio del cuerpo
+    radio_cabeza = 0.25; % Radio de la cabeza
     
     % Número de puntos para dibujar el cilindro
     num_puntos = 50;
@@ -27,7 +27,6 @@ function personas3d(posicion_x, posicion_y)
     Z_cabeza = Z_cabeza * radio_cabeza + altura_maxima;
     
     % Dibujar el cilindro y la cabeza
-    figure;
     hold on;
     surf(X, Y, Z, 'FaceColor', 'blue', 'EdgeColor', 'none');
     surf(X_cabeza, Y_cabeza, Z_cabeza, 'FaceColor', 'red', 'EdgeColor', 'none');

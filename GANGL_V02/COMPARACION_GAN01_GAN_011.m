@@ -36,8 +36,7 @@ graficar_personas(x,y);
 grid on;
 title('Segundo modelo')
 
-%% rotacion: 30°
-[xr, yr, zr] = rotar_gaussiana(x,y,z,90,xcm,ycm);
+
 figure
 
 subplot(1, 2, 1);

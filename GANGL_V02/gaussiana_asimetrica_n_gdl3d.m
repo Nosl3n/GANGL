@@ -153,5 +153,6 @@ function [xrot, yrot, zrot] = gaussiana_asimetrica_n_gdl3d(x,y,vf, vri, vl, vre)
     % plot(xcm, ycm, 'bo', 'MarkerSize', 10); % Marcar centro de masa en rojo
     % hold on;
     % plot(xcm, ycm, 'bo', 'MarkerSize', 5); % Marcar centro de masa en rojo
+
     mesh(xx, yy,zz);
 end
