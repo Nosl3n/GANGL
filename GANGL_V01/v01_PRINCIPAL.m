@@ -9,5 +9,5 @@ n = randi([2, limvec]);% Generar un número aleatorio de elementos para el vecto
 x = li * rand(1, n); % Valores aleatorios
 y = li * rand(1, n); % Valores aleatorios 
 figure (1)
-[xr, yr, zr] = gaussiana_asimetrica_n_gdl(x,y,0, 0, 0, 0);
+[xr, yr, zr] = GANGL_V01(x,y,1,1);
 grid on;

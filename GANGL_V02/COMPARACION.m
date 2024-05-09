@@ -1,3 +1,4 @@
+%% COMPARACION ENTRE LOS MODELOS GANGL V01 Y GANGL V02
 clc;
 clear all;
 close all;
@@ -18,8 +19,10 @@ else %Mas de 2 personas CH
     xcm = mean(x(k));
     ycm = mean(y(k));
 end
-
-% Definir la disposición de la cuadrícula (1 fila, 2 columnas) y seleccionar el primer cuadrante
+%% Rotar la gaussiana 90°
+giro = 90;
+[xr,yr,zr] = rotar_gaussiana(x,y,z,30,xcm,ycm);
+%% Graficas comparativas
 figure
 
 subplot(1, 2, 1);
@@ -27,29 +30,29 @@ GANGDL_v01(x,y);
 hold on;
 graficar_personas(x,y);
 grid on;
-title('Primer modelo');
+title('GANGL_V01');
 % Seleccionar el segundo cuadrante
 subplot(1, 2, 2);
-GANGDL(x,y);
+GANGDL_v01(xr,yr);
 hold on;
 graficar_personas(x,y);
 grid on;
-title('Segundo modelo')
+title('GANGL_V01 - GIRADO ');
 
 
 figure
 
 subplot(1, 2, 1);
-GANGDL_v01(xr,yr);
+GANGDL(x,y);
 hold on;
 graficar_personas(xr,yr);
 grid on;
-title('Primer modelo');
+title('GANGL_V02');
 % Seleccionar el segundo cuadrante
 subplot(1, 2, 2);
 GANGDL(xr,yr);
 hold on;
 graficar_personas(xr,yr);
 grid on;
-title('Segundo modelo')
+title('GANGL_V02 - GIRADO ');
 
