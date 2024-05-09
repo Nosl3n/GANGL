@@ -1,6 +1,9 @@
+%% COMPARACION ENTRE LOS MODELOS GANGL V01 Y GANGL V02
 clc;
 clear all;
 close all;
+addpath('/home/shado/Programas/Matlab/GANGL/GANGL_V01/funtions');
+addpath('/home/shado/Programas/Matlab/GANGL/GANGL_V01');
 % Distribución 4 personas ordenadas de forma cuadrada.
 r=0.3;
 li=5;%limite de coordenadas, maximo 5.
@@ -18,39 +21,25 @@ else %Mas de 2 personas CH
     xcm = mean(x(k));
     ycm = mean(y(k));
 end
-
-% Definir la disposición de la cuadrícula (1 fila, 2 columnas) y seleccionar el primer cuadrante
+%% Rotar la gaussiana 90°
+giro = 90;
+[xr,yr,zr] = rotar_gaussiana(x,y,z,30,xcm,ycm);
+%% Graficas comparativas modelo V01
 figure
-
 subplot(1, 2, 1);
-[xr, yr, zr] = GANGDL_v01(x,y);
-hold on;
-graficar_personas(x,y);
-grid on;
-title('Primer modelo');
+GANGL_V01(x,y,0,1);
+title('GANGL_V01');
 % Seleccionar el segundo cuadrante
 subplot(1, 2, 2);
-GANGDL(x,y);
-hold on;
-graficar_personas(x,y);
-grid on;
-title('Segundo modelo')
-
-%% rotacion: 30°
-[] = rotar_gaussiana(x,y,z,30,xcm,ycm);
+GANGL_V01(xr,yr,0,1);
+title('GANGL_V01 - GIRADO ');
+%% GRAFICA DEL MODELO V02
 figure
-
 subplot(1, 2, 1);
-[xr, yr, zr] = GANGDL_v01(x,y);
-hold on;
-graficar_personas(x,y);
-grid on;
-title('Primer modelo');
+GANGL_V02(x,y,0,1);
+title('GANGL_V02');
 % Seleccionar el segundo cuadrante
 subplot(1, 2, 2);
-GANGDL(x,y);
-hold on;
-graficar_personas(x,y);
-grid on;
-title('Segundo modelo')
+GANGL_V02(xr,yr,0,1);
+title('GANGL_V02 - GIRADO ');
 

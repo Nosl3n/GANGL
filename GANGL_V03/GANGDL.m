@@ -1,8 +1,7 @@
-%Donde [x y] son las posiciones de todos los individuos que conforman el
-%grupo de personas, vf: varianza frontal, vri: varianza rigth, vl:varianza
-%left y vre: varianza rear.
-function [xrot, yrot, zrot] = GANGDL_v01(x,y)
-% ---------------> hallar el centro del grupo CG <-----------------------------
+%% VERSION GANGL_V01 - (x,y) entradas | posicion de las personas | GRAF - 1:grafica 3d - 0:grafica 2d 
+function [xrot, yrot, zrot] = GANGDL(x,y)
+    addpath("funtions/");
+%% Determinacion del centro del grupo:
     if length (x) == 2 %Si son dos personas CM
         xcm = sum(x) / length(x);
         ycm = sum(y) / length(y);
@@ -11,24 +10,51 @@ function [xrot, yrot, zrot] = GANGDL_v01(x,y)
         xcm = mean(x(k));
         ycm = mean(y(k));
     end
-% ---------------------------> end <------------------------------------------
-% ---------> Ordenamiendo de los puntos en sentido horario <------------------
-    ang_ordenar = rad2deg(atan2(y - ycm, x - xcm));
-    angulos_ajustados = mod(ang_ordenar, 360);
-    [~, indice_orden] = sort(angulos_ajustados); % Ordenar los puntos según los ángulos ajustados
-    x_ord = x(indice_orden); % Generar los nuevos vectores x e y ordenados
-    y_ord = y(indice_orden);
+%% Determinar la orientacion del grupo
+    if xcm - xcm == 0
+        xmove = -xcm;
+    else
+        xmove = xcm;
+    end
+    
+    if ycm - ycm == 0
+        ymove = -ycm;
+    else
+        ymove = ycm;
+    end
+    xor = x + xmove;
+    yor = y + ymove;
+    theta = orientacion_vec(xor, yor, 0); %% Ordenamiento de los puntos
+    [x_ord, y_ord] = ordenar_puntos(xcm, ycm, x, y);
+    [dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
+    %% Determinar el primer individuo mas cercano a la direccion
+    orientacion = 1000;
+    for i=1:length(ang)
+        if theta < ang(i)
+            orientacion = ang(i); %Primer angulo, para rotar todo
+            break;
+        end
+        %En el caso de que no hay angulos mayores a la direccion veectorial
+        %escogera el primer angulo desde 0°
+        if orientacion == 1000
+            orientacion = ang(1);
+        end
+    end
+    %reordenamiento del vector angulos
+    new_vector = ordenamiento(ang,orientacion); %vector ordenado desde la orientacion como cero grados
+    ang=new_vector;
+    disp('referencia');disp(orientacion);disp(new_vector);
+    disp(ang);
 %----------------------------> end <------------------------------------------
     %Se halla las distancias del centro de masa a cada pesona, ademas del
     %angulo formado con respecto al eje x
-    [dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
+    %[dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
 %----------------------------ROTACION DE LA GAUSSIANA ----------------------
-    rotacion = -ang(1);
+    rotacion = -orientacion;
     %rotacion = 0;
-    
 %-----------------------------------END------------------------------------
 %----------------------------- VARIANZAS MADRE  ----------------------------
-    min_sig = 0.5;
+    min_sig = 0.5; %minimo valor de las varianzas
     for i=1:length(dis)  
         sigma_y(i) = abs(dis(i))/2;
         sigma_x(i) = abs(dis(i));
@@ -120,9 +146,18 @@ function [xrot, yrot, zrot] = GANGDL_v01(x,y)
         end
     end
 %Se crea la gaussiana:
-    zz = exp(-(xx - xcm).^2 ./ (2 .* varianzax.^2) - (yy - ycm).^2 ./ (2 .* varianzay.^2));  
+    zz = exp(-(xx - xcm).^2 ./ (2 .* varianzax.^2) - (yy - ycm).^2 ./ (2 .* varianzay.^2));
+
+    for i = 1:101
+        for j = 1:101
+            % Accede al elemento en la posición (i, j)
+            %fprintf('%f',zz(i, j));
+        end
+        %fprintf('\n');
+    end    
 %Se rota el desfase de la gaussiana
     [xrot,yrot,zrot] = rotar_gaussiana (xx,yy,zz,rotacion,xcm,ycm);
+%Se grafica el contorno
     contour(xrot,yrot,zrot,[0.1,0.1],'LineColor', 'g');
     hold on;
     contour(xrot,yrot,zrot,[0.3,0.3],'LineColor', 'y');

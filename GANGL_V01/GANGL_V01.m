@@ -25,23 +25,6 @@ function GANGL_V01(x,y,GRAF,per)
         sigma_y(i) = abs(dis(i))*sin(deg2rad (ang(i)));
         sigma_x(i) = abs(dis(i))*cos(deg2rad (ang(i)));
     end
-
-    % for i=1:length(dis)
-    %     if ang(i)>=0 && ang(i)<=180
-    %         sigma_y(i) = abs(dis(i))*sin(deg2rad (ang(i)));
-    %         sigma_x(i) = abs(dis(i))*cos(deg2rad (ang(i)));
-    %     else
-    %         sigma_y(i) = abs(dis(i))*sin(deg2rad (ang(i)));
-    %         sigma_x(i) = abs(dis(i))*cos(deg2rad (ang(i)));
-    %     end
-    %     if ang(i)>=90 && ang(i)<=270
-    %         sigma_y(i) = abs(dis(i))*sin(deg2rad (ang(i)));
-    %         sigma_x(i) = abs(dis(i))*cos(deg2rad (ang(i)));
-    %     else
-    %         sigma_y(i) = abs(dis(i))*sin(deg2rad(ang(i)));
-    %         sigma_x(i) = abs(dis(i))*cos(deg2rad(ang(i)));
-    %     end
-    % end
 %Se añade el sigma inicial, al final de todos los sigmas.
     sigma_x(length(sigma_x)+1)=sigma_x(1);
     sigma_y(length(sigma_y)+1)=sigma_y(1);
@@ -131,4 +114,5 @@ function GANGL_V01(x,y,GRAF,per)
     else
         graficar_lineas_nivel(xrot,yrot,zrot,xcm,ycm);
     end
+    grid on;
 end

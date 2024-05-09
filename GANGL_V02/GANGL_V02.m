@@ -1,8 +1,8 @@
-%Donde [x y] son las posiciones de todos los individuos que conforman el
-%grupo de personas, vf: varianza frontal, vri: varianza rigth, vl:varianza
-%left y vre: varianza rear.
-function [xrot, yrot, zrot] = GANGDL(x,y)
-% ---------------> hallar el centro del grupo CG <-----------------------------
+%% VERSION GANGL_V01 - (x,y) entradas | posicion de las personas | GRAF - 1:grafica 3d - 0:grafica 2d 
+function [xrot, yrot, zrot] = GANGL_V02(x,y,GRAF,per)
+    addpath("funtions/");
+    addpath("/home/shado/Programas/Matlab/GANGL/GANGL_V01/funtions");
+%% Determinacion del centro del grupo:
     if length (x) == 2 %Si son dos personas CM
         xcm = sum(x) / length(x);
         ycm = sum(y) / length(y);
@@ -11,24 +11,18 @@ function [xrot, yrot, zrot] = GANGDL(x,y)
         xcm = mean(x(k));
         ycm = mean(y(k));
     end
-% ---------------------------> end <------------------------------------------
-% ---------> Ordenamiendo de los puntos en sentido horario <------------------
+%% Ordenamiento de los puntos en sentido horario.
     ang_ordenar = rad2deg(atan2(y - ycm, x - xcm));
     angulos_ajustados = mod(ang_ordenar, 360);
     [~, indice_orden] = sort(angulos_ajustados); % Ordenar los puntos según los ángulos ajustados
     x_ord = x(indice_orden); % Generar los nuevos vectores x e y ordenados
     y_ord = y(indice_orden);
-%----------------------------> end <------------------------------------------
-    %Se halla las distancias del centro de masa a cada pesona, ademas del
-    %angulo formado con respecto al eje x
+%% Determinacion de las distancias y sus angulos con respecto al eje x, de cada punto al centro del grupo
     [dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
-%----------------------------ROTACION DE LA GAUSSIANA ----------------------
+%% Se escoge al primer integrante y su angulo sera el que se tiene que rotar
     rotacion = -ang(1);
-    %rotacion = 0;
-    
-%-----------------------------------END------------------------------------
-%----------------------------- VARIANZAS MADRE  ----------------------------
-    min_sig = 0.5;
+%% Determinacion de las varianzas Madre
+    min_sig = 0.5; %minimo valor de las varianzas
     for i=1:length(dis)  
         sigma_y(i) = abs(dis(i))/2;
         sigma_x(i) = abs(dis(i));
@@ -38,17 +32,6 @@ function [xrot, yrot, zrot] = GANGDL(x,y)
             sigma_y(i) = sigma_y(i);
         end
     end
-
-    % 
-    % disp('Varianzas en el eje X')
-    % disp(sigma_x)
-    % disp('Varianzas en el eje Y')
-    % disp(sigma_y)
-    % disp ('Coordenadas x:')
-    % disp(x)
-    % disp ('Coordenadas y:')
-    % disp(y)
-    % disp('--------------------------------')
 %Se añade el sigma inicial, al final de todos los sigmas.
     sigma_x(length(sigma_x)+1)=sigma_x(1);
     sigma_y(length(sigma_y)+1)=sigma_y(1);
@@ -72,11 +55,8 @@ function [xrot, yrot, zrot] = GANGDL(x,y)
             j=j+1;
         end
     end
-%Generacion de el vector de sigmas, para esto se hara un recorrido de 360
-%grados con saltos de delta_ang, se comenzara desde el punto mas cercano al
-%eje x y ademas contando el angulo desplazado positivamente en sentido
-%antihorario.
-    delta_ang=1;%----------------------------------------------------------------------------------------------
+%% Determinar los sigma hijos, con un recorrido de 0 a 360°, con saltos de delta_ang
+    delta_ang=1;
     j=2;
     k=1;
     cont=0;
@@ -94,15 +74,17 @@ function [xrot, yrot, zrot] = GANGDL(x,y)
         sigma_xx(i) = ((t1/distancias(j))*sigma_x(k)) + ((t2/distancias(j))*sigma_x(k+1));
         sigma_yy(i) = ((t1/distancias(j))*sigma_y(k)) + ((t2/distancias(j))*sigma_y(k+1));
     end
-
-% ---------------> Se crea la malla con la cual se hallara la gaussiana <--------------
-    xpos = abs(max(x))+3;
-    xneg = abs(min(x))-3;
-    ypos = abs(max(y))+3;
-    yneg = abs(min(y))-3;
-
-    [xx, yy] = meshgrid((xneg):0.01:(xpos), (yneg):0.01:(ypos));
-% ----------------------------------> end malla <--------------------------------------
+%% GENERACION DE LA MALLA PARA LA GAUSSIANA
+    lado = 4; %maximo valor de cada lado de la grafica
+    paso = 0.1; %Paso de la malla, entre punto a punto
+    xpos = abs(max(x))+lado;
+    xneg = abs(min(x))-lado;
+    ypos = abs(max(y))+lado;
+    yneg = abs(min(y))-lado;
+    %Se genera la malla en la que se determianra cada punto de la
+    %gaussiana.
+    [xx, yy] = meshgrid((xneg):paso:(xpos), (yneg):paso:(ypos));
+%% Creacion de las matrices de varianzas
     tam=size(yy);
     for i=1:1:tam(1)
         for j=1:1:tam(2)
@@ -119,9 +101,24 @@ function [xrot, yrot, zrot] = GANGDL(x,y)
             varianzay(i,j) = sigma_yy(alpha);
         end
     end
-%Se crea la gaussiana:
-    zz = exp(-(xx - xcm).^2 ./ (2 .* varianzax.^2) - (yy - ycm).^2 ./ (2 .* varianzay.^2));  
-%Se rota el desfase de la gaussiana
+%% Se crea cada punto zz de la funcion gaussiana
+    zz = exp(-(xx - xcm).^2 ./ (2 .* varianzax.^2) - (yy - ycm).^2 ./ (2 .* varianzay.^2));
+   
+%% Se rota el desfase de la gaussiana
     [xrot,yrot,zrot] = rotar_gaussiana (xx,yy,zz,rotacion,xcm,ycm);
-    mesh(xx, yy,zz);
+%% Se grafica el contorno
+    if GRAF==1 && per == 1
+        mesh(xx, yy,zz);
+        hold on;
+        graficar_personas3d(x,y);
+    elseif GRAF==1 && per == 0
+        mesh(xx, yy,zz);
+    elseif GRAF == 0 && per == 1
+        graficar_personas(x,y);
+        hold on;
+        graficar_lineas_nivel(xrot,yrot,zrot,xcm,ycm);
+    else
+        graficar_lineas_nivel(xrot,yrot,zrot,xcm,ycm);
+    end
+    grid on;
 end
