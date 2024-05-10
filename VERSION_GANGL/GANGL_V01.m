@@ -11,15 +11,12 @@ function GANGL_V01(x,y,GRAF,per)
         ycm = mean(y(k));
     end
 %% Ordenamiento de los puntos en sentido horario.
-    ang_ordenar = rad2deg(atan2(y - ycm, x - xcm));
-    angulos_ajustados = mod(ang_ordenar, 360);
-    [~, indice_orden] = sort(angulos_ajustados); % Ordenar los puntos según los ángulos ajustados
-    x_ord = x(indice_orden); % Generar los nuevos vectores x e y ordenados
-    y_ord = y(indice_orden);
+    [x_ord, y_ord] = ordenar_puntos(xcm,ycm,x,y);
 %% Determinacion de las distancias y sus angulos con respecto al eje x, de cada punto al centro del grupo
     [dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
 %% Se escoge al primer integrante y su angulo sera el que se tiene que rotar
     rotacion = -ang(1);
+    ang_vec = orientacion_vec(x_ord,y_ord,xcm,ycm,1);
 %% Determinacion de las varianzas Madre
     for i=1:length(dis)
         sigma_y(i) = abs(dis(i))*sin(deg2rad (ang(i)));

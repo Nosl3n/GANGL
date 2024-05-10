@@ -1,22 +1,48 @@
-%% VERSION GANGL_V01 - (x,y) entradas | posicion de las personas | GRAF - 1:grafica 3d - 0:grafica 2d 
-function [xrot, yrot, zrot] = GANGL_V02(x,y,GRAF,per)
-    addpath("funtions_V01\");
+clc; clear all; close all;
+addpath("VERSION_GANGL\funtions_V01\");
+addpath("VERSION_GANGL\");
+%% Parametros de entrada
+% li=5;%limite de coordenadas, maximo 5.
+% limvec=6; %limite del numero de personas.
+% n = randi([2, limvec]);% Generar un número aleatorio de elementos para el vector (n)
+% x = li * rand(1, n); % Valores aleatorios
+% y = li * rand(1, n); % Valores aleatorios 
+%% Parametro de entrada estatico
+x=[0 6 9 1];
+y=[6 8 4 2];
+%% Parametros de configuracion
+GRAF=0; %0:grafica2d y 1:grafica3d
+per=1;  %1:con personas y 0:sin personas
 %% Determinacion del centro del grupo:
-    if length (x) == 2 %Si son dos personas CM
-        xcm = sum(x) / length(x);
-        ycm = sum(y) / length(y);
-    else %Mas de 2 personas CH
-        k = convhull(x, y);
-        xcm = mean(x(k));
-        ycm = mean(y(k));
-    end
+if length (x) == 2 %Si son dos personas CM
+    xcm = sum(x) / length(x);
+    ycm = sum(y) / length(y);
+else %Mas de 2 personas CH
+    k = convhull(x, y);
+    xcm = mean(x(k));
+    ycm = mean(y(k));
+end
 %% Ordenamiento de los puntos en sentido horario.
-    [x_ord, y_ord] = ordenar_puntos(xcm,ycm,x,y);
+[x_ord, y_ord] = ordenar_puntos(xcm,ycm,x,y);
 %% Determinacion de las distancias y sus angulos con respecto al eje x, de cada punto al centro del grupo
-    [dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
+[dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
 %% Se escoge al primer integrante y su angulo sera el que se tiene que rotar
-    rotacion = -ang(1);
-    ang_vec = orientacion_vec(x_ord,y_ord,xcm,ycm,1);
+rotacion = -ang(1);
+%% ------------------------------NUEVO CODIGO ----------------------------------------------------
+ang_vec = orientacion_vec(x_ord,y_ord,xcm,ycm,1);
+% Determinar el valor mas cercano a la orientacion
+orientacion = 1000;
+for i=1:length(ang)
+    if ang_vec < ang(i)
+        orientacion = ang(i); %Primer angulo, para rotar todo
+        break;
+    end
+    %En el caso de que no hay angulos mayores a la direccion veectorial
+    %escogera el primer angulo desde 0°
+    if orientacion == 1000
+        orientacion = ang(1);
+    end
+end
 %% Determinacion de las varianzas Madre
     min_sig = 0.5; %minimo valor de las varianzas
     for i=1:length(dis)  
@@ -117,4 +143,3 @@ function [xrot, yrot, zrot] = GANGL_V02(x,y,GRAF,per)
         graficar_lineas_nivel(xrot,yrot,zrot,xcm,ycm);
     end
     grid on;
-end

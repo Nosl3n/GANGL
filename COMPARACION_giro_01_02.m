@@ -24,7 +24,7 @@ else %Mas de 2 personas CH
 end
 %% Rotar la gaussiana 90°
 giro = 90;
-[xr,yr,zr] = rotar_gaussiana(x,y,z,30,xcm,ycm);
+[xr,yr,zr] = rotar_gaussiana(x,y,z,giro,xcm,ycm);
 %% Graficas comparativas modelo V01
 figure
 subplot(1, 2, 1);
