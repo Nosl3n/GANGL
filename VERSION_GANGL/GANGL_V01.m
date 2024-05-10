@@ -1,7 +1,6 @@
 %% VERSION GANGL_V01 - (x,y) entradas | posicion de las personas | GRAF - 1:grafica 3d - 0:grafica 2d 
-function [xrot, yrot, zrot] = GANGL_V02(x,y,GRAF,per)
-    addpath("funtions/");
-    addpath("/home/shado/Programas/Matlab/GANGL/GANGL_V01/funtions");
+function GANGL_V01(x,y,GRAF,per)
+    addpath("funtions_V01\");
 %% Determinacion del centro del grupo:
     if length (x) == 2 %Si son dos personas CM
         xcm = sum(x) / length(x);
@@ -22,15 +21,9 @@ function [xrot, yrot, zrot] = GANGL_V02(x,y,GRAF,per)
 %% Se escoge al primer integrante y su angulo sera el que se tiene que rotar
     rotacion = -ang(1);
 %% Determinacion de las varianzas Madre
-    min_sig = 0.5; %minimo valor de las varianzas
-    for i=1:length(dis)  
-        sigma_y(i) = abs(dis(i))/2;
-        sigma_x(i) = abs(dis(i));
-        if sigma_y(i) < min_sig
-            sigma_y(i) = min_sig;
-        else
-            sigma_y(i) = sigma_y(i);
-        end
+    for i=1:length(dis)
+        sigma_y(i) = abs(dis(i))*sin(deg2rad (ang(i)));
+        sigma_x(i) = abs(dis(i))*cos(deg2rad (ang(i)));
     end
 %Se añade el sigma inicial, al final de todos los sigmas.
     sigma_x(length(sigma_x)+1)=sigma_x(1);
@@ -55,6 +48,7 @@ function [xrot, yrot, zrot] = GANGL_V02(x,y,GRAF,per)
             j=j+1;
         end
     end
+
 %% Determinar los sigma hijos, con un recorrido de 0 a 360°, con saltos de delta_ang
     delta_ang=1;
     j=2;

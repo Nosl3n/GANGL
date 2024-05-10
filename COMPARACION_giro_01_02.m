@@ -2,8 +2,9 @@
 clc;
 clear all;
 close all;
-addpath('/home/shado/Programas/Matlab/GANGL/GANGL_V01/funtions');
-addpath('/home/shado/Programas/Matlab/GANGL/GANGL_V01');
+addpath('GANGL_V01\funtions\');
+addpath('GANGL_V02\');
+addpath('GANGL_V01\');
 % Distribución 4 personas ordenadas de forma cuadrada.
 r=0.3;
 li=5;%limite de coordenadas, maximo 5.
