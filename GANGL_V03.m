@@ -2,14 +2,14 @@ clc; clear all; close all;
 addpath("VERSION_GANGL\funtions_V01\");
 addpath("VERSION_GANGL\");
 %% Parametros de entrada
-% li=5;%limite de coordenadas, maximo 5.
-% limvec=6; %limite del numero de personas.
-% n = randi([2, limvec]);% Generar un número aleatorio de elementos para el vector (n)
-% x = li * rand(1, n); % Valores aleatorios
-% y = li * rand(1, n); % Valores aleatorios 
+li=5;%limite de coordenadas, maximo 5.
+limvec=6; %limite del numero de personas.
+n = randi([2, limvec]);% Generar un número aleatorio de elementos para el vector (n)
+x = li * rand(1, n); % Valores aleatorios
+y = li * rand(1, n); % Valores aleatorios 
 %% Parametro de entrada estatico
-x=[0 6 9 1];
-y=[6 8 4 2];
+% x=[0 6 9 1];
+% y=[6 8 4 2];
 %% Parametros de configuracion
 GRAF=0; %0:grafica2d y 1:grafica3d
 per=1;  %1:con personas y 0:sin personas
@@ -43,6 +43,14 @@ for i=1:length(ang)
         orientacion = ang(1);
     end
 end
+%% DETERMINANOS LA NUEVA DISTRIBUCION DE VECTORES
+disp('direccion');
+disp(ang_vec);disp(orientacion);
+disp('distribucion normal');
+disp(ang);disp(x_ord);disp(y_ord);
+[ang_new ang_ord x_new y_new] = ordenamiento(ang, orientacion, x_ord, y_ord);
+disp('distribucion con direccion');
+disp(ang_new);disp(ang_ord);disp(x_new);disp(y_new);
 %% Determinacion de las varianzas Madre
     min_sig = 0.5; %minimo valor de las varianzas
     for i=1:length(dis)  

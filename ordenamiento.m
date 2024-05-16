@@ -1,6 +1,8 @@
-function nuevo = ordenamiento(ang, referencia)    
+function [nuevo_ang nuevo x_nuv y_nuv] = ordenamiento(ang, referencia, x, y)    
     indice = find(ang == referencia);%Encuentra el indice de la referencia
     nuevo_ang = [ang(indice:end), ang(1:indice-1)];%Reordenamiento segun el indice
+    x_nuv = [x(indice:end), x(1:indice-1)];%Reordenamiento segun el indice
+    y_nuv = [y(indice:end), y(1:indice-1)];%Reordenamiento segun el indice
     % disp(nuevo_ang);
     %Se reordena considerando la referencia como cero grados
     for i=1:length(ang)

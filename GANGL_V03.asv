@@ -2,14 +2,14 @@ clc; clear all; close all;
 addpath("VERSION_GANGL\funtions_V01\");
 addpath("VERSION_GANGL\");
 %% Parametros de entrada
-% li=5;%limite de coordenadas, maximo 5.
-% limvec=6; %limite del numero de personas.
-% n = randi([2, limvec]);% Generar un número aleatorio de elementos para el vector (n)
-% x = li * rand(1, n); % Valores aleatorios
-% y = li * rand(1, n); % Valores aleatorios 
+li=5;%limite de coordenadas, maximo 5.
+limvec=6; %limite del numero de personas.
+n = randi([2, limvec]);% Generar un número aleatorio de elementos para el vector (n)
+x = li * rand(1, n); % Valores aleatorios
+y = li * rand(1, n); % Valores aleatorios 
 %% Parametro de entrada estatico
-x=[3 6 9 1];
-y=[5 8 4 2];
+% x=[0 6 9 1];
+% y=[6 8 4 2];
 %% Parametros de configuracion
 GRAF=0; %0:grafica2d y 1:grafica3d
 per=1;  %1:con personas y 0:sin personas
@@ -28,9 +28,25 @@ end
 [dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
 %% Se escoge al primer integrante y su angulo sera el que se tiene que rotar
 rotacion = -ang(1);
-%% NUEVO CODIGO
-
-
+%% ------------------------------NUEVO CODIGO ----------------------------------------------------
+ang_vec = orientacion_vec(x_ord,y_ord,xcm,ycm,1);
+% Determinar el valor mas cercano a la orientacion
+orientacion = 1000;
+for i=1:length(ang)
+    if ang_vec < ang(i)
+        orientacion = ang(i); %Primer angulo, para rotar todo
+        break;
+    end
+    %En el caso de que no hay angulos mayores a la direccion veectorial
+    %escogera el primer angulo desde 0°
+    if orientacion == 1000
+        orientacion = ang(1);
+    end
+end
+%% DETERMINANOS LA NUEVA DISTRIBUCION DE VECTORES
+disp('distribucion normal');
+disp(ang);
+[ang_new x_new y_new] = ordenamiento(ang, orientacion, x_ord, y_ord);
 %% Determinacion de las varianzas Madre
     min_sig = 0.5; %minimo valor de las varianzas
     for i=1:length(dis)  
