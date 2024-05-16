@@ -1,5 +1,5 @@
 %% VERSION GANGL_V01 - (x,y) entradas | posicion de las personas | GRAF - 1:grafica 3d - 0:grafica 2d 
-function [xrot, yrot, zrot] = GANGL_V02(x,y,GRAF,per)
+function GANGL_V02(x,y,GRAF,per)
     addpath("funtions_V01\");
 %% Determinacion del centro del grupo:
     if length (x) == 2 %Si son dos personas CM

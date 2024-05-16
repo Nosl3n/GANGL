@@ -46,13 +46,13 @@ function GANGL_V03(x,y,GRAF,per)
     %% Determinacion de las varianzas Madre
         min_sig = 0.5; %minimo valor de las varianzas
         for i=1:length(dis)  
-            sigma_y(i) = abs(dis(i))/2;
-            sigma_x(i) = abs(dis(i));
-            if sigma_y(i) < min_sig
-                sigma_y(i) = min_sig;
-            else
-                sigma_y(i) = sigma_y(i);
-            end
+            sigma_y(i) = (abs(dis(i))/2) + min_sig;
+            sigma_x(i) = abs(dis(i))+ min_sig;
+            % if sigma_y(i) < min_sig
+            %     sigma_y(i) = min_sig;
+            % else
+            %     sigma_y(i) = sigma_y(i);
+            % end
         end
     %Se añade el sigma inicial, al final de todos los sigmas.
         sigma_x(length(sigma_x)+1)=sigma_x(1);
