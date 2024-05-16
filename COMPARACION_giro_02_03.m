@@ -3,7 +3,8 @@ clc;
 clear all;
 close all;
 addpath('VERSION_GANGL/funtions_V01/');
-addpath('VERSION_GANGL/');
+addpath('VERSION_GANGL/funtions_V03/');
+addpath('VERSION_GANGL/')
 % Distribución 4 personas ordenadas de forma cuadrada.
 r=0.3;
 li=5;%limite de coordenadas, maximo 5.
@@ -13,7 +14,7 @@ x = li * rand(1, n); % Valores aleatorios
 y = li * rand(1, n); % Valores aleatorios 
 z = li * rand(1, n); % Valores aleatorios 
 %% Parametros de configuracion
-GRAF=1; %0:grafica2d y 1:grafica3d
+GRAF=0; %0:grafica2d y 1:grafica3d
 per=1;  %1:con personas y 0:sin personas
 %% DETERMINAR EL CENTRO DEL GRUPO
 if length (x) == 2 %Si son dos personas CM
@@ -30,19 +31,19 @@ giro = 90;
 %% Graficas comparativas modelo V01
 figure
 subplot(1, 2, 1);
-GANGL_V01(x,y,GRAF,per);
-title('GANGL_V01');
-% Seleccionar el segundo cuadrante
-subplot(1, 2, 2);
-GANGL_V01(xr,yr,GRAF,per);
-title('GANGL_V01 - GIRADO ');
-%% GRAFICA DEL MODELO V02
-figure
-subplot(1, 2, 1);
 GANGL_V02(x,y,GRAF,per);
 title('GANGL_V02');
 % Seleccionar el segundo cuadrante
 subplot(1, 2, 2);
 GANGL_V02(xr,yr,GRAF,per);
 title('GANGL_V02 - GIRADO ');
+%% GRAFICA DEL MODELO V02
+figure
+subplot(1, 2, 1);
+GANGL_V03(x,y,GRAF,per);
+title('GANGL_V03');
+% Seleccionar el segundo cuadrante
+subplot(1, 2, 2);
+GANGL_V03(xr,yr,GRAF,per);
+title('GANGL_V03 - GIRADO ');
 

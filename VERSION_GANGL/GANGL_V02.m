@@ -104,11 +104,11 @@ function [xrot, yrot, zrot] = GANGL_V02(x,y,GRAF,per)
     [xrot,yrot,zrot] = rotar_gaussiana (xx,yy,zz,rotacion,xcm,ycm);
 %% Se grafica el contorno
     if GRAF==1 && per == 1
-        mesh(xx, yy,zz);
+        mesh(xrot, yrot,zrot);
         hold on;
         graficar_personas3d(x,y);
     elseif GRAF==1 && per == 0
-        mesh(xx, yy,zz);
+        mesh(xrot, yrot,zrot);
     elseif GRAF == 0 && per == 1
         graficar_personas(x,y);
         hold on;
