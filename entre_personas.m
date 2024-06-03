@@ -1,5 +1,5 @@
 function [xmod ymod] = entre_personas(minima, ang, dis, x_ord, y_ord)
-    distancias = separacion (ang) %determian las distancias entre personas
+    distancias = separacion (ang); %determian las distancias entre personas
     eliminar = 0;
     for i=1:length(distancias)
         if (distancias(i) <= minima) %filtro de distancia

@@ -1,7 +1,7 @@
 clc; clear all; close all;
 %% Importar la direccion de las funciones.
-addpath('VERSION_GANGL\funtions_V01\');
-addpath('VERSION_GANGL\funtions_V03\');
+addpath('VERSION_GANGL/funtions_V01/');
+addpath('VERSION_GANGL/funtions_V03/');
 %% Data
 % Distribución 4 personas ordenadas de forma cuadrada.
 r=0.3;
@@ -29,14 +29,38 @@ for i=1:length(x)
     [dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
     % Se añade un valor al final para la determinacion de la distancia.
     [x_mod y_mod] = entre_personas(15, ang, dis, x_ord, y_ord);
-    if length(x_mod) == length(x_ord);
+    if length(x_mod) == length(x_ord)
         break;
     else
         x_ord = x_mod;
         y_ord = y_mod;
     end
 end
-%% Filtro de linea.
+%% Agregar puntos cuando estan muy alejados
+[dis1, ang1] = dis_ang (x_mod,y_mod,xcm,ycm)
+nuevas_distancias = separacion(ang1)
+maximo = 50;
+aumentar = 0;
+if (nuevas_distancias(i) >= maximo) %filtro de distancia
+        if i == length(x_mod)
+            if dis(i) < dis(1)
+                aumentar = i;
+            else
+                aumentar = 1;
+            end
+        else
+            if dis(i) < dis(i+1)
+                aumentar = i;
+            else
+                aumentar = i+1;
+            end
+        end
+end
+if aumentar == 1
+
+else 
+end
+
 %% Grafico de las personas.
 figure
 graficar_personas(x,y);
