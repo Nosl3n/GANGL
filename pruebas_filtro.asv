@@ -28,8 +28,7 @@ for i=1:length(x)
         y_ord = y_mod;
     end
 end
-x_mod
-y_mod
+x:
 %% Agregar puntos cuando estan muy alejados
 [dis1, ang1] = dis_ang (x_mod,y_mod,xcm,ycm);
 nuevas_distancias = separacion(ang1);
@@ -43,9 +42,11 @@ for i=1:length(x_mod)
         aumentar = 0;
     end
 end
+aumentar
 if aumentar ~= 0
     angulo = ang1(aumentar) + (nuevas_distancias(aumentar)/2);
-    Lnew = dis1(aumentar)/4+dis1(aumentar+1)/4;
+    % Lnew = dis1(aumentar)/4+dis1(aumentar+1)/4;
+    Lnew = (dis1(aumentar)/4)+(dis1(aumentar+1)/4);
     xnew = cos(deg2rad(angulo))*Lnew+xcm;
     ynew = sin(deg2rad(angulo))*Lnew+ycm;
     j=1;
