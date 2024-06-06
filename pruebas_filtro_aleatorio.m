@@ -37,30 +37,20 @@ for i=1:length(x)
     end
 end
 %% Agregar puntos cuando estan muy alejados
-[dis1, ang1] = dis_ang (x_mod,y_mod,xcm,ycm)
-nuevas_distancias = separacion(ang1)
-maximo = 50;
-aumentar = 0;
-if (nuevas_distancias(i) >= maximo) %filtro de distancia
-        if i == length(x_mod)
-            if dis(i) < dis(1)
-                aumentar = i;
-            else
-                aumentar = 1;
-            end
-        else
-            if dis(i) < dis(i+1)
-                aumentar = i;
-            else
-                aumentar = i+1;
-            end
-        end
+condicion = 1;
+xaum = x_mod; yaum = y_mod;
+j=1;
+while (condicion == 1)
+    j=j+1;
+    disp(j);
+    [x_aum y_aum] = aumentar(70,xaum,yaum,xcm,ycm);
+    if length(x_aum) == length(xaum)
+        condicion = 0;
+    else
+        xaum = x_aum
+        yaum = y_aum
+    end
 end
-if aumentar == 1
-
-else 
-end
-
 %% Grafico de las personas.
 figure
 graficar_personas(x,y);
@@ -76,4 +66,12 @@ hold on;
 plot(xcm,ycm,'o','LineWidth',2,'Color','b');
 hold on;
 GANGL_V04(x_mod,y_ord,GRAF,per);
+grid on;
+%% 
+figure
+graficar_personas(x,y);
+hold on;
+plot(xcm,ycm,'o','LineWidth',2,'Color','b');
+hold on;
+GANGL_V04(x_aum,y_aum,0,0);
 grid on;
