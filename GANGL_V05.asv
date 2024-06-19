@@ -1,20 +1,12 @@
-function GANGL_V04(x,y,GRAF,per)
+function GANGL_V05(x,y,GRAF,per)
     addpath('VERSION_GANGL\funtions_V01\');
     addpath('VERSION_GANGL\funtions_V03\');
     %% Determinacion del centro del grupo:
-    if length (x) == 2 %Si son dos personas CM
-        xcm = sum(x) / length(x);
-        ycm = sum(y) / length(y);
-    else %Mas de 2 personas Maximos y minimos
-        xcm = (max(x) + min(x)) / 2; 
-        ycm = (max(y) + min(y)) / 2;
-    end
+    xcm = (max(x) + min(x)) / 2; 
+    ycm = (max(y) + min(y)) / 2;
     %% Ordenamiento de los puntos en sentido horario.
     [x_ord, y_ord] = ordenar_puntos(xcm,ycm,x,y);
-    %% filtro de la data.
-    
-
-    %% Determinacion de las distancias y sus angulos con respecto al eje x, de cada punto al centro del grupo
+    %% Determinacion de las distancias y sus angulos con respecto al eje x con respecto a cxm y cym
     [dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
     %% DETERMINACION DE LA ORIENTACION
     ang_vec = orientacion_vec(x_ord,y_ord,xcm,ycm,1);
@@ -25,7 +17,7 @@ function GANGL_V04(x,y,GRAF,per)
             orientacion = ang(i); %Primer angulo, para rotar todo
             break;
         end
-        %En el caso de que no hay angulos mayores a la direccion veectorial
+        %En el caso de que no hay angulos mayores a la direccion vectorial
         %escogera el primer angulo desde 0°
         if orientacion == 1000
             orientacion = ang(1);
@@ -33,6 +25,23 @@ function GANGL_V04(x,y,GRAF,per)
     end
     %% EL ANGULO QUE SE TIENE QUE ROTAR SERA "ORIENTACION"
     rotacion = -orientacion;
+    %% SE APLICA EL FILTRO DE ELIMINAR PERSONAS xmod y ymod.
+    for i=1:length(x)
+        % Distancias del origen a cada persona, ademas sus angulos con respecto al eje x:
+        [dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
+        % Se añade un valor al final para la determinacion de la distancia.
+        [x_mod y_mod] = entre_personas(12, ang, dis, x_ord, y_ord);
+        if length(x_mod) == length(x_ord)
+            break;
+        else
+            x_ord = x_mod;
+            y_ord = y_mod;
+        end
+    end
+    %% SE APLICA EL FILTRO DE AUMENTAR PERSONAS xaum y yaum
+    [x_aum y_aum] = aumentar_02 (70,x_mod,y_mod,xcm,ycm);
+    %% Determinacion de las distancias y sus angulos con respecto al eje x con respecto a cxm y cym
+    [dis, ang] = dis_ang (x_aum,y_aum,xcm,ycm);
     %% DETERMINANOS LA NUEVA DISTRIBUCION DE VECTORES
     [ang_new ang x_new y_new] = ordenamiento(ang, orientacion, x_ord, y_ord); %la nueva entrada sera: 
     %% Determinacion de las distancias y sus angulos con respecto al eje x, de cada punto al centro del grupo
@@ -86,7 +95,7 @@ function GANGL_V04(x,y,GRAF,per)
             sigma_yy(i) = ((t1/distancias(j))*sigma_y(k)) + ((t2/distancias(j))*sigma_y(k+1));
         end
     %% GENERACION DE LA MALLA PARA LA GAUSSIANA
-        lado = 4; %maximo valor de cada lado de la grafica
+        lado = 5; %maximo valor de cada lado de la grafica
         paso = 0.1; %Paso de la malla, entre punto a punto
         xpos = abs(max(x))+lado;
         xneg = abs(min(x))-lado;

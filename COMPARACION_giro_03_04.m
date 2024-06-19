@@ -12,6 +12,7 @@ limvec=10; %limite del numero de personas.
 n = randi([2, limvec]);% Generar un número aleatorio de elementos para el vector (n)
 x = li * rand(1, n); % Valores aleatorios
 y = li * rand(1, n); % Valores aleatorios 
+z = li * rand(1, n); % Valores aleatorios 
 %% Parametros de configuracion
 GRAF=0; %0:grafica2d y 1:grafica3d
 per=1;  %1:con personas y 0:sin personas

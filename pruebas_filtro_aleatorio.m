@@ -5,8 +5,8 @@ addpath('VERSION_GANGL/funtions_V03/');
 %% Data
 % Distribución 4 personas ordenadas de forma cuadrada.
 r=0.3;
-li=5;%limite de coordenadas, maximo 5.
-limvec=10; %limite del numero de personas.
+li=8;%limite de coordenadas, maximo 5.
+limvec=20; %limite del numero de personas.
 n = randi([2, limvec]);% Generar un número aleatorio de elementos para el vector (n)
 x = li * rand(1, n); % Valores aleatorios
 y = li * rand(1, n); % Valores aleatorios 
@@ -28,7 +28,7 @@ for i=1:length(x)
     % Distancias del origen a cada persona, ademas sus angulos con respecto al eje x:
     [dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
     % Se añade un valor al final para la determinacion de la distancia.
-    [x_mod y_mod] = entre_personas(15, ang, dis, x_ord, y_ord);
+    [x_mod y_mod] = entre_personas(12, ang, dis, x_ord, y_ord);
     if length(x_mod) == length(x_ord)
         break;
     else
@@ -37,20 +37,7 @@ for i=1:length(x)
     end
 end
 %% Agregar puntos cuando estan muy alejados
-condicion = 1;
-xaum = x_mod; yaum = y_mod;
-j=1;
-while (condicion == 1)
-    j=j+1;
-    disp(j);
-    [x_aum y_aum] = aumentar(70,xaum,yaum,xcm,ycm);
-    if length(x_aum) == length(xaum)
-        condicion = 0;
-    else
-        xaum = x_aum
-        yaum = y_aum
-    end
-end
+[x_aum y_aum] = aumentar_02 (60,x_ord,y_ord,xcm,ycm);
 %% Grafico de las personas.
 figure
 graficar_personas(x,y);
