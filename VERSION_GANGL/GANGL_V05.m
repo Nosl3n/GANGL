@@ -1,6 +1,19 @@
 function GANGL_V05(x,y,GRAF,per)
+     % Añadir rutas para funciones adicionales
     addpath('VERSION_GANGL\funtions_V01\');
     addpath('VERSION_GANGL\funtions_V03\');
+%% Mensajes de depuracion "errores"
+    % Verificar que los vectores x e y tienen el mismo tamaño
+    if length(x) ~= length(y)
+        error('Los vectores x e y deben tener el mismo tamaño.');
+    end
+    % Verificar que GRAF y per son números y que solo pueden ser 0 o 1
+    if ~isnumeric(GRAF) || ~ismember(GRAF, [0, 1])
+        error('GRAF debe ser un valor numérico, 0 o 1.');
+    end
+    if ~isnumeric(per) || ~ismember(per, [0, 1])
+        error('per debe ser un valor numérico, 0 o 1.');
+    end
     %% Determinacion del centro del grupo:
     xcm = (max(x) + min(x)) / 2; 
     ycm = (max(y) + min(y)) / 2;
@@ -30,7 +43,7 @@ function GANGL_V05(x,y,GRAF,per)
         % Distancias del origen a cada persona, ademas sus angulos con respecto al eje x:
         [dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
         % Se añade un valor al final para la determinacion de la distancia.
-        [x_mod y_mod] = entre_personas(12, ang, dis, x_ord, y_ord);
+        [x_mod y_mod] = entre_personas(15, ang, dis, x_ord, y_ord);
         if length(x_mod) == length(x_ord)
             break;
         else
@@ -47,14 +60,12 @@ function GANGL_V05(x,y,GRAF,per)
     %% Determinacion de las distancias y sus angulos con respecto al eje x, de cada punto al centro del grupo
     [dis, ang_sum] = dis_ang (x_new,y_new,xcm,ycm);
     %% Determinacion de las varianzas Madre
-        min_sig = 0.5; %minimo valor de las varianzas
-        for i=1:length(dis)  
-            sigma_y(i) = abs(dis(i))+min_sig;
-            sigma_x(i) = abs(dis(i))+min_sig;
-        end
-    %Se añade el sigma inicial, al final de todos los sigmas.
-        sigma_x(length(sigma_x)+1)=sigma_x(1);
-        sigma_y(length(sigma_y)+1)=sigma_y(1);
+    min_sig = 0.5; % mínimo valor de las varianzas
+    sigma_x = abs(dis) + min_sig;
+    sigma_y = abs(dis) + min_sig;
+    % Se añade el sigma inicial, al final de todos los sigmas.
+    sigma_x(end + 1) = sigma_x(1);
+    sigma_y(end + 1) = sigma_y(1);
     %Se determinan las distancias para hallar los sigmas intermedios.
         for i=1:length(ang)
             if i==length(ang)
@@ -65,22 +76,15 @@ function GANGL_V05(x,y,GRAF,per)
         end
     %se genera un valor de cero al comienzo del arreglo para manerar mejor los
     %indices:
-        j=1;
-        for i=1:length(distan)+1
-            if i==1
-                distancias(j)=0;
-                j=j+1;
-            else
-                distancias(j)=distan(i-1);
-                j=j+1;
-            end
-        end
+    distancias = [0, distan];
     %% Determinar los sigma hijos, con un recorrido de 0 a 360°, con saltos de delta_ang
         delta_ang=1;
         j=2;
         k=1;
         cont=0;
         angulo=0;
+        sigma_xx = zeros(1, 360);
+        sigma_yy = zeros(1, 360);
         for i=1:360
             if i>distancias(j)+angulo
                 angulo=distancias(j)+angulo;
@@ -111,11 +115,10 @@ function GANGL_V05(x,y,GRAF,per)
                 theta = atan2(yy(i,j) - ycm, xx(i,j) - xcm); 
                 theta = mod(rad2deg (theta), 360);
                 alpha = round( theta ); %redondeando se asigna un valor al angulo OJO
-                if alpha>=360
-                    alpha=360;
-                end
-                if alpha<=1
-                    alpha=1;
+                if alpha >= 360
+                    alpha = 360;
+                elseif alpha <= 1
+                    alpha = 1;
                 end
                 varianzax(i,j) = sigma_xx(alpha);
                 varianzay(i,j) = sigma_yy(alpha);
@@ -141,3 +144,8 @@ function GANGL_V05(x,y,GRAF,per)
         end
         grid on;
 end
+% La función GANGL_V05 procesa un conjunto de puntos (x, y) para determinar 
+% su distribución, orientación y generar una malla gaussiana 3D. La función 
+% incluye varias etapas: determinación del centro del grupo, ordenamiento 
+% de puntos, cálculo de distancias y ángulos, eliminación y adición de puntos, 
+% rotación y graficación de la malla gaussiana.

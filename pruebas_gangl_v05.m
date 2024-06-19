@@ -4,9 +4,6 @@ close all;
 %% Se agregan paths
 addpath("VERSION_GANGL\");
 addpath("VERSION_GANGL\funtions_V01\")
-addpath("VERSION_GANGL\funtions_V02\")
-addpath("VERSION_GANGL\funtions_V03\")
-addpath("VERSION_GANGL\funtions_V04\")
 addpath("VERSION_GANGL\funtions_V05\")
 %% Generacion de data aleatoria
 r=0.3;
@@ -16,7 +13,7 @@ n = randi([2, limvec]);% Generar un número aleatorio de elementos para el vecto
 x = li * rand(1, n); % Valores aleatorios
 y = li * rand(1, n); % Valores aleatorios
 %% Variables de entrada de la funcion GANGL
-GRAF = 1;
+GRAF = 0;
 per = 1;
 %% Funcion gaussiana
 GANGL_V05(x,y,GRAF,per);
