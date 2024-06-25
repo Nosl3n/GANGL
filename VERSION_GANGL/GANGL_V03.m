@@ -1,15 +1,9 @@
 function GANGL_V03(x,y,GRAF,per)
-    addpath('funtions_V01/');
-    addpath('funtions_V03/');
+    addpath("VERSION_GANGL\funtions_V01\");
+    addpath("VERSION_GANGL\funtions_V03\");
     %% Determinacion del centro del grupo:
-    if length (x) == 2 %Si son dos personas CM
-        xcm = sum(x) / length(x);
-        ycm = sum(y) / length(y);
-    else %Mas de 2 personas CH
-        k = convhull(x, y);
-        xcm = mean(x(k));
-        ycm = mean(y(k));
-    end
+    xcm = (max(x) + min(x)) / 2; 
+    ycm = (max(y) + min(y)) / 2;
     %% Ordenamiento de los puntos en sentido horario.
     [x_ord, y_ord] = ordenar_puntos(xcm,ycm,x,y);
     %% Determinacion de las distancias y sus angulos con respecto al eje x, de cada punto al centro del grupo

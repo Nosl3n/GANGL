@@ -1,19 +1,11 @@
-
 function GANGL_V04(x,y,GRAF,per)
     %% DIRECCIONES QUE SE USARAN
-    addpath('funtions_V01/');
-    addpath('funtions_V03/');
-    addpath('funtions_V04/');
-    
+    addpath("VERSION_GANGL\funtions_V01\");
+    addpath("VERSION_GANGL\funtions_V03\");
+    addpath("VERSION_GANGL\funtions_V04\");
     %% Determinar el centro del grupo CG
-    if length (x) == 2 %Si son dos personas, centro de masa "cm"
-        xcm = sum(x) / length(x);
-        ycm = sum(y) / length(y);
-    else %Mas de 2 personas, ConexHull "CH"
-        k = convhull(x, y);
-        xcm = mean(x(k));
-        ycm = mean(y(k));
-    end
+    xcm = (max(x) + min(x)) / 2; 
+    ycm = (max(y) + min(y)) / 2;
      %% Ordenamiento de los puntos en sentido horario.
         [x_ord, y_ord] = ordenar_puntos(xcm,ycm,x,y);
      %% Determinacion de las distancias y sus angulos con respecto al eje x, de cada punto al centro del grupo
@@ -46,18 +38,9 @@ function GANGL_V04(x,y,GRAF,per)
     %% Determinacion de las distancias y sus angulos con respecto al eje x, de cada punto al centro del grupo
     [dis, ang_sum] = dis_ang (x_new,y_new,xcm,ycm);
     %% generando las varianzas
-    min_sig = 0.5; %valor minimo del crecimiento de una varianza.
-    for i=1:length(dis)  
-       % tam_y = abs((dis(i))*sin(deg2rad (ang(i))));
-        %tam_x = abs((dis(i))*cos(deg2rad (ang(i))));
-        sigma_y(i) = abs(dis(i))/2;
-        sigma_x(i) = abs(dis(i));
-        if sigma_y(i) < min_sig
-            sigma_y(i) = min_sig;
-        else
-            sigma_y(i) = sigma_y(i);
-        end
-    end
+    min_sig = 0.5; % mínimo valor de las varianzas
+    sigma_x = abs(dis) + min_sig;
+    sigma_y = abs(dis) + min_sig;
     % Se le agrega el primer sigma al comienzo.
     sigma_x(length(sigma_x)+1)=sigma_x(1);
     sigma_y(length(sigma_y)+1)=sigma_y(1);

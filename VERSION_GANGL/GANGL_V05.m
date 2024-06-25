@@ -13,31 +13,26 @@ function GANGL_V05(x,y,GRAF,per)
     end
     if ~isnumeric(per) || ~ismember(per, [0, 1])
         error('per debe ser un valor numérico, 0 o 1.');
+        
     end
     %% Determinacion del centro del grupo:
-    xcm = (max(x) + min(x)) / 2; 
-    ycm = (max(y) + min(y)) / 2;
+    xcm = (max(x) + min(x)) / 2 
+    ycm = (max(y) + min(y)) / 2
+    % if length (x) == 2 %Si son dos personas CM
+    %     xcm = sum(x) / length(x)
+    %     ycm = sum(y) / length(y)
+    % else %Mas de 2 personas CH
+    %     k = convhull(x, y);
+    %     xcm = mean(x(k))
+    %     ycm = mean(y(k))
+    % end
     %% Ordenamiento de los puntos en sentido horario.
     [x_ord, y_ord] = ordenar_puntos(xcm,ycm,x,y);
     %% Determinacion de las distancias y sus angulos con respecto al eje x con respecto a cxm y cym
     [dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
     %% DETERMINACION DE LA ORIENTACION
-    ang_vec = orientacion_vec(x_ord,y_ord,xcm,ycm,1);
+    ang_vec = orientacion_vec(x_ord,y_ord,xcm,ycm,1)
     % Determinar el valor mas cercano a la orientacion
-    orientacion = 1000;
-    for i=1:length(ang)
-        if ang_vec < ang(i)
-            orientacion = ang(i); %Primer angulo, para rotar todo
-            break;
-        end
-        %En el caso de que no hay angulos mayores a la direccion vectorial
-        %escogera el primer angulo desde 0°
-        if orientacion == 1000
-            orientacion = ang(1);
-        end
-    end
-    %% EL ANGULO QUE SE TIENE QUE ROTAR SERA "ORIENTACION"
-    rotacion = -orientacion;
     %% SE APLICA EL FILTRO DE ELIMINAR PERSONAS xmod y ymod.
     for i=1:length(x)
         % Distancias del origen a cada persona, ademas sus angulos con respecto al eje x:
@@ -53,6 +48,21 @@ function GANGL_V05(x,y,GRAF,per)
     end
     %% SE APLICA EL FILTRO DE AUMENTAR PERSONAS xaum y yaum
     [x_aum y_aum] = aumentar_02 (70,x_mod,y_mod,xcm,ycm);
+    %% Se halla la primera persona cercana a la orientacion
+    orientacion = 1000;
+    for i=1:length(ang)
+        if ang_vec < ang(i)
+            orientacion = ang(i); %Primer angulo, para rotar todo
+            break;
+        end
+        %En el caso de que no hay angulos mayores a la direccion vectorial
+        %escogera el primer angulo desde 0°
+        if orientacion == 1000
+            orientacion = ang(1);
+        end
+    end
+    %% EL ANGULO QUE SE TIENE QUE ROTAR SERA "ORIENTACION"
+    rotacion = -orientacion;
     %% Determinacion de las distancias y sus angulos con respecto al eje x con respecto a cxm y cym
     [dis, ang] = dis_ang (x_aum,y_aum,xcm,ycm);
     %% DETERMINANOS LA NUEVA DISTRIBUCION DE VECTORES
@@ -66,7 +76,7 @@ function GANGL_V05(x,y,GRAF,per)
     % Se añade el sigma inicial, al final de todos los sigmas.
     sigma_x(end + 1) = sigma_x(1);
     sigma_y(end + 1) = sigma_y(1);
-    %Se determinan las distancias para hallar los sigmas intermedios.
+    %% Se determinan las distancias para hallar los sigmas intermedios.
         for i=1:length(ang)
             if i==length(ang)
                 distan(i)=360-ang(i)+ang(1);
