@@ -19,11 +19,6 @@ GRAF = 0;
 per = 1;
 %% Funcion gaussiana
 figure
-GANGL_V05(x,y,GRAF,per);
-title('version 05');
-figure
-GANGL_V04(x,y,GRAF,per);
-title('version 04');
-figure
-GANGL_V03(x,y,GRAF,per);
-title('version 03');
+Area = GANGL_V05(x,y,GRAF,per);
+disp ('Area de la region prohibida');
+disp(Area);

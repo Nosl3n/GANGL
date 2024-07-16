@@ -1,4 +1,4 @@
-function GANGL_V05(x,y,GRAF,per)
+function Area = GANGL_V05(x,y,graf,VISTA,per)
      % Añadir rutas para funciones adicionales
     addpath('VERSION_GANGL\funtions_V01\');
     addpath('VERSION_GANGL\funtions_V03\');
@@ -8,16 +8,19 @@ function GANGL_V05(x,y,GRAF,per)
         error('Los vectores x e y deben tener el mismo tamaño.');
     end
     % Verificar que GRAF y per son números y que solo pueden ser 0 o 1
-    if ~isnumeric(GRAF) || ~ismember(GRAF, [0, 1])
-        error('GRAF debe ser un valor numérico, 0 o 1.');
+    if ~isnumeric(VISTA) || ~ismember(VISTA, [2, 3])
+        error('VISTA debe ser un valor numérico, 2 o 3.');
+    end
+    if ~isnumeric(graf) || ~ismember(graf, [0, 1])
+        error('graf debe ser un valor numérico, 2 o 3.');
     end
     if ~isnumeric(per) || ~ismember(per, [0, 1])
         error('per debe ser un valor numérico, 0 o 1.');
         
     end
     %% Determinacion del centro del grupo:
-    xcm = (max(x) + min(x)) / 2 
-    ycm = (max(y) + min(y)) / 2
+    xcm = (max(x) + min(x)) / 2; 
+    ycm = (max(y) + min(y)) / 2;
     % if length (x) == 2 %Si son dos personas CM
     %     xcm = sum(x) / length(x)
     %     ycm = sum(y) / length(y)
@@ -31,7 +34,7 @@ function GANGL_V05(x,y,GRAF,per)
     %% Determinacion de las distancias y sus angulos con respecto al eje x con respecto a cxm y cym
     [dis, ang] = dis_ang (x_ord,y_ord,xcm,ycm);
     %% DETERMINACION DE LA ORIENTACION
-    ang_vec = orientacion_vec(x_ord,y_ord,xcm,ycm,1)
+    ang_vec = orientacion_vec(x_ord,y_ord,xcm,ycm,graf);
     % Determinar el valor mas cercano a la orientacion
     %% SE APLICA EL FILTRO DE ELIMINAR PERSONAS xmod y ymod.
     for i=1:length(x)
@@ -109,14 +112,13 @@ function GANGL_V05(x,y,GRAF,per)
             sigma_yy(i) = ((t1/distancias(j))*sigma_y(k)) + ((t2/distancias(j))*sigma_y(k+1));
         end
     %% GENERACION DE LA MALLA PARA LA GAUSSIANA
-        lado = 5; %maximo valor de cada lado de la grafica
+        lado = 2.5; %maximo valor de cada lado de la grafica
         paso = 0.1; %Paso de la malla, entre punto a punto
         xpos = abs(max(x))+lado;
         xneg = abs(min(x))-lado;
         ypos = abs(max(y))+lado;
         yneg = abs(min(y))-lado;
-        %Se genera la malla en la que se determianra cada punto de la
-        %gaussiana.
+        %Se genera la malla en la que se determianra cada punto de la gaussiana.
         [xx, yy] = meshgrid((xneg):paso:(xpos), (yneg):paso:(ypos));
     %% Creacion de las matrices de varianzas
         tam=size(yy);
@@ -137,15 +139,16 @@ function GANGL_V05(x,y,GRAF,per)
     %% Se crea cada punto zz de la funcion gaussiana
         zz = exp(-(xx - xcm).^2 ./ (2 .* varianzax.^2) - (yy - ycm).^2 ./ (2 .* varianzay.^2));
     %% Se rota el desfase de la gaussiana
-        [xrot,yrot,zrot] = rotar_gaussiana (xx,yy,zz,rotacion,xcm,ycm);
+        [xrot,yrot,zrot] = rotar_gaussiana (xx,yy,zz,rotacion,xcm,ycm);     
     %% Se grafica el contorno
-        if GRAF==1 && per == 1
+    if graf == 1
+        if VISTA==3 && per == 1
             mesh(xrot, yrot,zrot);
             hold on;
             graficar_personas3d(x,y);
-        elseif GRAF==1 && per == 0
+        elseif VISTA==3 && per == 0
             mesh(xrot, yrot,zrot);
-        elseif GRAF == 0 && per == 1
+        elseif VISTA == 2 && per == 1
             graficar_personas(x,y);
             hold on;
             graficar_lineas_nivel(xrot,yrot,zrot,xcm,ycm);
@@ -153,6 +156,30 @@ function GANGL_V05(x,y,GRAF,per)
             graficar_lineas_nivel(xrot,yrot,zrot,xcm,ycm);
         end
         grid on;
+    end
+%% Obtener el área bajo el contorno de nivel 0.3
+    if graf ~= 1
+        % Crear la figura pero hacer que no sea visible
+        fig = figure('Visible', 'off');
+    end
+    hold on;
+    [C, h] = contour(xrot, yrot, zrot, [0.58, 0.58],'LineColor', 'b');
+    Area = 0;
+    for k = 1:length(h.LevelList)
+        contour_level = h.LevelList(k);
+        if contour_level == 0.58
+            for i = 1:length(h.ContourMatrix)
+                x_contour = h.ContourMatrix(1, 2:end);
+                y_contour = h.ContourMatrix(2, 2:end);
+                % Calcular el área usando el método de integración numérica
+                Area = polyarea(x_contour, y_contour);
+            end
+        end
+    end
+    hold off;
+    if graf ~= 1
+        close(fig);
+    end
 end
 % La función GANGL_V05 procesa un conjunto de puntos (x, y) para determinar 
 % su distribución, orientación y generar una malla gaussiana 3D. La función 

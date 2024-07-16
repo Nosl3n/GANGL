@@ -45,11 +45,3 @@ end
 % utiliza la dirección del primer punto. Si hay más, ordena los puntos por 
 % ángulo y suma sus vectores. Finalmente, convierte la dirección resultante 
 % a un ángulo en grados y la grafica si se solicita.
-
-
-
-
-
-
-
-

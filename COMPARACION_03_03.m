@@ -88,7 +88,6 @@ n = randi([2, limvec]);% Generar un número aleatorio de elementos para el vecto
 x = li * rand(1, n); % Valores aleatorios
 y = li * rand(1, n); % Valores aleatorios 
 z = li * rand(1, n); % Valores aleatorios 
-
 %% Graficas comparativas modelo
 figure
 subplot(1, 2, 1);
@@ -98,4 +97,3 @@ title('GANGL_V03');
 subplot(1, 2, 2);
 GANGL_V03_1(x,y,GRAF,per);
 title('GANGL_V03_1');
-

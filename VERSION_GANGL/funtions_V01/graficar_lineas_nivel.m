@@ -10,15 +10,17 @@ function graficar_lineas_nivel(xrot,yrot,zrot,xcm,ycm)
     end
 %% CODIGO
     % Dibujar contornos de nivel
-    contour(xrot, yrot, zrot, [0.1, 0.1], 'LineColor', 'g');
+    contour(xrot, yrot, zrot, [0.9, 0.9], 'LineColor', 'r');
     hold on;
-    contour(xrot, yrot, zrot, [0.3, 0.3], 'LineColor', 'y');
-    hold on;
-    contour(xrot, yrot, zrot, [0.6, 0.6], 'LineColor', 'r');
+    contour(xrot, yrot, zrot, [0.75, 0.75], 'LineColor', 'g');
+    %hold on;
+    contour(xrot, yrot, zrot, [0.58, 0.58], 'LineColor', 'b');
     hold on;
     % Marcar el centro de masa en azul con tamaños decrecientes
     plot(xcm, ycm, 'bo', 'MarkerSize', 15);
+    hold on;
     plot(xcm, ycm, 'bo', 'MarkerSize', 10);
+    hold on;
     plot(xcm, ycm, 'bo', 'MarkerSize', 5);
 end
 % La función graficar_lineas_nivel dibuja contornos de nivel en una gráfica 
